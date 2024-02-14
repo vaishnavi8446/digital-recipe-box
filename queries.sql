@@ -39,3 +39,13 @@ CREATE TABLE notifications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+ALTER TABLE `notifications`
+ADD `read` BOOLEAN DEFAULT FALSE;
+
+CREATE TABLE images (
+   name VARCHAR(255),
+   type VARCHAR(255),
+   size VARCHAR(255)
+);

@@ -14,7 +14,7 @@ exports.registerUser = async (req, res) => {
         console.error(error);
         return res
           .status(500)
-          .send({ status_code: 500, message: "Failed to register user" });
+          .send({ status_code: 500, message: "Failed to register user,duplicate entry!" });
       }
       res
         .status(200)

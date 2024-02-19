@@ -24,7 +24,7 @@ exports.getAllNotifications = (req, res) => {
 exports.markNotificationAsRead = (req, res) => {
   try {
     const notificationId = req.params.id;
-    const sql = "UPDATE notifications SET read = ? WHERE id = ?";
+    const sql = "UPDATE notifications SET `read` = ? WHERE id = ?";
     const {read} = req.body;
     db.query(sql, [read, notificationId], (err, result) => {
       if (err) {
@@ -33,12 +33,14 @@ exports.markNotificationAsRead = (req, res) => {
           .status(500)
           .send({ status_code: 500, error: "Internal server error" });
       }
-      res.status(200).send({
+      console.log("read",read)
+     if(read == 0){
+      return res.status(200).send({
         status_code: 200,
         message: "Notification marked as read",
         data: result,
-      });
-    });
+      });}
+  });
   } catch (error) {
     console.error(error);
     res

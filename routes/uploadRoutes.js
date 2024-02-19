@@ -45,6 +45,7 @@ router.post(
   uploadController.uploadImage
 );
 
-router.get("/:filename", uploadController.getImage);
+
+router.get("/getImage/:filename", uploadController.getImage);
 
 module.exports = router;

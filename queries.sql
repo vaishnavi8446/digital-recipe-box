@@ -49,3 +49,6 @@ CREATE TABLE images (
    type VARCHAR(255),
    size VARCHAR(255)
 );
+
+ALTER TABLE `images`
+ADD `id` INT AUTO_INCREMENT PRIMARY KEY;

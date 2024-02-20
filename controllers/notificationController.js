@@ -41,9 +41,8 @@ exports.markNotificationAsRead = async (req, res) => {
         );
         return res.status(200).send({
           status_code: 200,
-          message: "Notification marked as read!" 
+          message: "Notification marked as read!",
         });
-
       } else {
         return res.status(404).json({
           status_code: 404,
@@ -59,38 +58,32 @@ exports.markNotificationAsRead = async (req, res) => {
   }
 };
 
-//not working
 exports.deleteNotification = async (req, res) => {
   try {
-    const notificationId = req.params.id;
-    let idInTable = await idDbValueQuery(conn, notificationId);
-    console.log("id",idInTable[0].id)
-    if (idInTable) {
-      let notifications = await deleteNotification(conn, notificationId);
+    let id = req.params.id;
+    const CheckIdExistsRes = await idDbValueQuery(conn, id);
 
-      if (notifications) {
+    if (CheckIdExistsRes) {
+      const delNotificationRes = await deleteNotification(conn, id);
+      if (delNotificationRes) {
         return res.status(200).send({
           status_code: 200,
-          message: "Notification deleted!",
-          data: notifications,
-        });
-      } else {
-        return res.status(404).send({
-          status_code: 404,
-          message: "Notification not deleted!",
+          message: "Notification deleted successfully!",
+          data: delNotificationRes,
         });
       }
+      return res
+        .status(404)
+        .send({ status_code: 404, message: "Failed to delete notification!" });
     } else {
-      return res.status(404).send({
-        status_code: 404,
-        message: "Notification not found in the database!",
-      });
+      return res
+        .status(404)
+        .send({ status_code: 404, message: "id not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send({
-      status_code: 500,
-      message: "Internal server error",
-    });
+    return res
+      .status(500)
+      .send({ status_code: 500, message: "Internal server error" });
   }
 };

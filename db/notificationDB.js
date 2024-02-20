@@ -10,27 +10,27 @@ const getAllNotifications = (conn) => {
   });
 };
 
-const idDbValueQuery = (conn, notificationId) => {
+const idDbValueQuery = (conn, id) => {
   return new Promise((resolve, reject) => {
     conn.query(
-      "SELECT id FROM notifications where id = ?",
-      [notificationId],
+      "SELECT * FROM notifications where id = ?",
+      [id],
       (error, results) => {
-        if (error) {
-          reject(error);
+        if (results.length > 0) {
+          resolve(true); // ID exists
         } else {
-          resolve(results);
+          resolve(false); // ID does not exist
         }
       }
     );
   });
 };
 
-const deleteNotification = (conn, notificationId) => {
+const deleteNotification = (conn, id) => {
   return new Promise((resolve, reject) => {
     conn.query(
       "DELETE FROM notifications WHERE id = ?",
-      [notificationId],
+      [id],
       (error, results) => {
         if (error) {
           reject(error);

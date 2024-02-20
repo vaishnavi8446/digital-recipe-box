@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
+
 const conn = require("../db/db");
 const { registerUser, loginUser, ifEmailExists } = require("../db/userDB");
+const { generateToken } = require("../shared/auth");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -54,10 +56,10 @@ exports.loginUser = async (req, res) => {
         .status(401)
         .send({ status_code: 401, message: "Invalid email or password" });
     }
-
+    const token = generateToken(user);
     return res
       .status(200)
-      .send({ status_code: 200, message: "Login successful" });
+      .send({ status_code: 200, message: "Login successful", token: token });
   } catch (error) {
     console.error(error);
     return res

@@ -3,13 +3,15 @@ const bcrypt = require("bcrypt");
 const conn = require("../db/db");
 const { registerUser, loginUser, ifEmailExists } = require("../db/userDB");
 const { generateToken } = require("../shared/auth");
+const { registerSchema, loginSchema } = require('../validation/userValidation');
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password } = await registerSchema.validateAsync(req.body);
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const emailCheck = await ifEmailExists(conn, email);
+    console.log("emailCheck",emailCheck)
 
     if (!emailCheck) {
       let registerData = await registerUser(
@@ -39,34 +41,33 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = await loginSchema.validateAsync(req.body);
 
-    const login = await loginUser(conn, email);
+    const user = await loginUser(conn, email, password);
 
-    if (login.length === 0) {
-      return res
-        .status(401)
-        .send({ status_code: 401, message: "Invalid email or password" });
+    if (!user) {
+      return res.status(401).send({
+        status_code: 401,
+        message: "Invalid email or password"
+      });
     }
 
-    const user = login[0];
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res
-        .status(401)
-        .send({ status_code: 401, message: "Invalid email or password" });
-    }
     const token = generateToken(user);
-    return res
-      .status(200)
-      .send({ status_code: 200, message: "Login successful", token: token });
+    
+    return res.status(200).send({
+      status_code: 200,
+      message: "Login successful",
+      token: token
+    });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .send({ status_code: 500, message: "Internal server error" });
+    return res.status(500).send({
+      status_code: 500,
+      message: "Internal server error"
+    });
   }
 };
+
 
 // Retrieve user profile information
 // exports.getUserProfile = async (req, res) => {

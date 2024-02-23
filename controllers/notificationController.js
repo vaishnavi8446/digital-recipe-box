@@ -7,6 +7,11 @@ const {
   updateNotificationQuery,
 } = require("../db/notificationDB");
 
+const {
+  markNotificationAsReadSchema,
+  deleteNotificationSchema,
+} = require("../validation/notificationValidation");
+
 exports.getAllNotifications = async (req, res) => {
   try {
     let notifications = await getAllNotifications(conn);
@@ -28,7 +33,7 @@ exports.getAllNotifications = async (req, res) => {
 exports.markNotificationAsRead = async (req, res) => {
   try {
     const notificationId = req.params.id;
-    const { read } = req.body;
+    const { read } = await markNotificationAsReadSchema.validateAsync(req.body);
     const readTableValue = await readDbValueQuery(conn, notificationId);
 
     if (readTableValue) {
@@ -61,6 +66,13 @@ exports.markNotificationAsRead = async (req, res) => {
 exports.deleteNotification = async (req, res) => {
   try {
     let id = req.params.id;
+    const { error } = deleteNotificationSchema.validate({ id });
+
+    if (error) {
+      return res
+        .status(400)
+        .json({ status_code: 400, error: error.details[0].message });
+    }
     const CheckIdExistsRes = await idDbValueQuery(conn, id);
 
     if (CheckIdExistsRes) {

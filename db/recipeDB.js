@@ -12,11 +12,11 @@ const fetchRecipe = (conn) => {
 
 const fetchRecipeById = (conn, id) => {
   return new Promise((resolve, reject) => {
-    conn.query("SELECT * FROM recipes WHERE id = ?", id, (error, results) => {
+    conn.query("SELECT * FROM recipes WHERE id = ?", [id], (error, results) => {
       if (error) {
         reject(error);
       } else {
-        resolve(results);
+        resolve(results[0]);
       }
     });
   });

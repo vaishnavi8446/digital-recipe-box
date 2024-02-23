@@ -9,7 +9,6 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
-    // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -17,9 +16,7 @@ const limits = {
   fileSize: 4000000,
 };
 
-//fileFilter function controls which files should be uploaded. req = request being made. file = contains file info. cb = callback function to tell multer when we are done filtering the file. send back an error message to the client with cb.
 const fileFilter = (req, file, cb) => {
-  //if the file is not a jpg, jpeg, or png file, do not upload it multer; reject it.
   if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
     return cb(
       new Error(
@@ -27,11 +24,9 @@ const fileFilter = (req, file, cb) => {
       )
     );
   }
-  //undefined = nothing went wrong; true = that is true, nothing went wrong, accept the upload.
   cb(undefined, true);
 };
 
-//set up the multer middleware
 const upload = multer({
   storage: storage,
   limits: limits,
@@ -46,6 +41,8 @@ router.post(
 );
 
 
-router.get("/getImage/:filename", uploadController.getImage);
+router.get("/getAllImages/:filename", uploadController.getImage);
+
+router.get("/getImageById/:id", uploadController.getImageById);
 
 module.exports = router;

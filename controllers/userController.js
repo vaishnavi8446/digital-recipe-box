@@ -1,25 +1,36 @@
 const bcrypt = require("bcrypt");
-const db = require("../db/db");
 
+const conn = require("../db/db");
+const { registerUser, loginUser, ifEmailExists } = require("../db/userDB");
+const { generateToken } = require("../shared/auth");
+const { registerSchema, loginSchema } = require('../validation/userValidation');
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { username, email, password } = await registerSchema.validateAsync(req.body);
 
-    const sql =
-      "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-    db.query(sql, [username, email, hashedPassword], (error, results) => {
-      if (error) {
-        console.error(error);
-        return res
-          .status(500)
-          .send({ status_code: 500, message: "Failed to register user,duplicate entry!" });
-      }
-      res
-        .status(200)
-        .send({ status_code: 200, message: "User registered successfully" });
-    });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const emailCheck = await ifEmailExists(conn, email);
+    console.log("emailCheck",emailCheck)
+
+    if (!emailCheck) {
+      let registerData = await registerUser(
+        conn,
+        username,
+        email,
+        hashedPassword
+      );
+      res.status(200).send({
+        status_code: 200,
+        message: "User registered successfully!",
+        data: registerData,
+      });
+    } else {
+      return res.status(400).send({
+        status_code: 400,
+        message: "Failed to register user,duplicate entry!",
+      });
+    }
   } catch (error) {
     console.error(error);
     res
@@ -30,40 +41,33 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = await loginSchema.validateAsync(req.body);
 
-    const sql = "SELECT * FROM users WHERE email = ?";
-    db.query(sql, [email], async (error, results) => {
-      if (error) {
-        console.error(error);
-        return res
-          .status(500)
-          .send({ status_code: 500, message: "Internal server error" });
-      }
+    const user = await loginUser(conn, email, password);
 
-      if (results.length === 0) {
-        return res
-          .status(401)
-          .send({ status_code: 401, message: "Invalid email or password" });
-      }
+    if (!user) {
+      return res.status(401).send({
+        status_code: 401,
+        message: "Invalid email or password"
+      });
+    }
 
-      const user = results[0];
-      const isPasswordMatch = await bcrypt.compare(password, user.password);
-      if (!isPasswordMatch) {
-        return res
-          .status(401)
-          .send({ status_code: 401, message: "Invalid email or password" });
-      }
-
-      res.status(200).send({ status_code: 200, message: "Login successful" });
+    const token = generateToken(user);
+    
+    return res.status(200).send({
+      status_code: 200,
+      message: "Login successful",
+      token: token
     });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .send({ status_code: 500, message: "Internal server error" });
+    return res.status(500).send({
+      status_code: 500,
+      message: "Internal server error"
+    });
   }
 };
+
 
 // Retrieve user profile information
 // exports.getUserProfile = async (req, res) => {

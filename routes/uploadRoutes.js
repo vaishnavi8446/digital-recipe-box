@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uploadController = require("../controllers/uploadController");
+const { verifyToken } = require("../shared/middleware");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -37,12 +38,12 @@ const upload = multer({
 router.post(
   "/uploadImage",
   upload.single("upload"),
+  verifyToken,
   uploadController.uploadImage
 );
 
+router.get("/getAllImages/:filename", verifyToken, uploadController.getImage);
 
-router.get("/getAllImages/:filename", uploadController.getImage);
-
-router.get("/getImageById/:id", uploadController.getImageById);
+router.get("/getImageById/:id", verifyToken, uploadController.getImageById);
 
 module.exports = router;

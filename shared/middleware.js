@@ -1,18 +1,25 @@
-const Joi = require('joi'); 
 
-const middleware = (schema, property) => { 
-  return (req, res, next) => { 
-  const { error } = Joi.validate(req.body, schema); 
-  const valid = error == null; 
-  
-  if (valid) { 
-    next(); 
-  } else { 
-    const { details } = error; 
-    const message = details.map(i => i.message).join(',');
- 
-    console.log("error", message); 
-   res.status(422).json({ error: message }) } 
-  } 
-} 
-module.exports = middleware;
+const jwt = require("jsonwebtoken");
+const secretKey = "your-secret-key"; 
+
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Authorization token not provided" });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    req.user = decoded; 
+    next();
+  });
+};
+
+module.exports = {
+  verifyToken,
+};

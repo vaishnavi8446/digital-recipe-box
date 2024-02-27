@@ -5,6 +5,7 @@ const { registerUser, loginUser, ifEmailExists } = require("../db/userDB");
 const { generateToken } = require("../shared/auth");
 const { registerSchema, loginSchema } = require('../validation/userValidation');
 
+
 exports.registerUser = async (req, res) => {
   try {
     const { username, email, password } = await registerSchema.validateAsync(req.body);
@@ -38,6 +39,7 @@ exports.registerUser = async (req, res) => {
       .send({ status_code: 500, message: "Internal server error" });
   }
 };
+
 
 exports.loginUser = async (req, res) => {
   try {

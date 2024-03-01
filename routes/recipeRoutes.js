@@ -14,17 +14,13 @@ const { verifyToken } = require("../shared/middleware");
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: A list of recipes
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Recipe'
+ *         description: Recipe fetched successfully
+ *       '400':
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.get("/getRecipe", verifyToken, recipeController.getRecipe);
 
@@ -46,17 +42,13 @@ router.get("/getRecipe", verifyToken, recipeController.getRecipe);
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: Recipe found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Recipe'
+ *         description: Recipe by id fetched successfully
+ *       '400':
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
- *       '404':
- *         $ref: '#/components/responses/NotFound'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.get("/getRecipe/:id", verifyToken, recipeController.getRecipeById);
 
@@ -72,22 +64,27 @@ router.get("/getRecipe/:id", verifyToken, recipeController.getRecipeById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/NewRecipe'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               ingredients:
+ *                 type: string
+ *               instructions:
+ *                 type: string
  *     security:
  *       - bearerAuth: []
  *     responses:
- *       '201':
+ *       '200':
  *         description: Recipe created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Recipe'
  *       '400':
- *         $ref: '#/components/responses/BadRequest'
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.post("/createRecipe", verifyToken, recipeController.createRecipe);
 
@@ -110,24 +107,27 @@ router.post("/createRecipe", verifyToken, recipeController.createRecipe);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateRecipe'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               ingredients:
+ *                 type: string
+ *               instructions:
+ *                 type: string
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: Recipe updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Recipe'
  *       '400':
- *         $ref: '#/components/responses/BadRequest'
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
- *       '404':
- *         $ref: '#/components/responses/NotFound'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.put("/updateRecipe/:id", verifyToken, recipeController.updateRecipe);
 

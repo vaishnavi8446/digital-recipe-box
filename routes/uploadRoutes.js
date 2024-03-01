@@ -36,12 +36,6 @@ const upload = multer({
 
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  * /uploads/uploadImage:
  *   post:
  *     summary: Upload an image
@@ -108,12 +102,6 @@ router.get("/getAllImages/:filename", verifyToken, uploadController.getImage);
 
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  * /uploads/getImageById/{id}:
  *   get:
  *     summary: Get an image by ID

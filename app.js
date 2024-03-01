@@ -37,7 +37,7 @@ const options = {
       title: "Digital Recipe Box",
       version: "0.1.0",
       description:
-        "This is Digital Recipe Box Backend made with Express and documented with Swagger",
+        "This API powers the Digital Recipe Box backend, built with NodeJS, Express and documented using Swagger.",
       contact: {
         name: "Vaishnavi Ambolkar",
         url: "https://github.com/vaishnavi8446",
@@ -49,6 +49,15 @@ const options = {
         url: "http://localhost:3000",
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: ["./routes/*.js"],
 };

@@ -14,18 +14,15 @@ const { verifyToken } = require("../shared/middleware");
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: A list of notifications
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Notification'
+ *         description: All notifications fetched successfully
+ *       '400':
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
+ 
 router.get("/getAllNotifications", verifyToken, notificationController.getAllNotifications);
 
 /**
@@ -42,17 +39,26 @@ router.get("/getAllNotifications", verifyToken, notificationController.getAllNot
  *         required: true
  *         schema:
  *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               read:
+ *                 type: boolean
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: Notification marked as read successfully
+ *         description: Mark notification successfully
+ *       '400':
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
- *       '404':
- *         $ref: '#/components/responses/NotFound'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.put("/mark-read/:id", verifyToken, notificationController.markNotificationAsRead);
 
@@ -73,14 +79,14 @@ router.put("/mark-read/:id", verifyToken, notificationController.markNotificatio
  *     security:
  *       - bearerAuth: []
  *     responses:
- *       '204':
- *         description: Notification deleted successfully
+ *       '200':
+ *         description: Delete notification successfully
+ *       '400':
+ *         description: Bad request
  *       '401':
- *         $ref: '#/components/responses/Unauthorized'
- *       '404':
- *         $ref: '#/components/responses/NotFound'
+ *         description: Unauthorized, token is missing or invalid
  *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *         description: Internal server error
  */
 router.delete("/deleteNotification/:id", verifyToken, notificationController.deleteNotification);
 

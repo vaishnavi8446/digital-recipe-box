@@ -5,7 +5,7 @@ const {
   deleteNotification,
   readDbValueQuery,
   updateNotificationQuery,
-} = require("../db/notificationDB");
+} = require("./../query/notificationQueries");
 
 const {
   markNotificationAsReadSchema,

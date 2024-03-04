@@ -4,9 +4,9 @@ const { app } = require("../app");
 describe("User Authentication APIs", function () {
   it(" It should register a new user", async () => {
     const res = await request(app).post("/user/register").send({
-      username: "testuser",
-      email: "it@example.com",
-      password: "password123",
+      username: process.env.USERNAME,
+      email: process.env.EMAIL,
+      password: process.env.PASSWORD,
     });
 
     expect(res.statusCode).toEqual(200);
@@ -16,8 +16,8 @@ describe("User Authentication APIs", function () {
 
   it(" It should login with the registered user", async () => {
     const res = await request(app).post("/user/login").send({
-      email: "vaishnaviambolkar12@gmail.com",
-      password: "Vaishnavi01",
+      email: process.env.EMAIL,
+      password: process.env.PASSWORD,
     });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("message", "Login successful");
@@ -26,17 +26,15 @@ describe("User Authentication APIs", function () {
   });
 });
 
-const authToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6InZhaXNobmF2aWFtYm9sa2FyMTJAZ21haWwuY29tIiwiaWF0IjoxNzA5Mzg5MzAzLCJleHAiOjE3MDkzOTI5MDN9.4B4tGS0muIjGa-zSH4CclEcjY-qucxN4uMwT-ItgZRQ";
+const authToken = process.env.authToken;
 
 describe("Notification APIs", () => {
-  let testNotificationId = 14;
+  let testNotificationId = 13;
 
   it(" It should retrieve all notifications", async () => {
     const response = await request(app)
       .get("/notification/getAllNotifications")
       .set("Authorization", `Bearer ${authToken}`);
-    console.log("Response Body:", response.body);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty("data");
   });
@@ -95,7 +93,6 @@ describe("Upload APIs", () => {
     const response = await request(app)
       .get(`/uploads/getImageById/${testImageId}`)
       .set("Authorization", `Bearer ${authToken}`);
-    console.log("response", response);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty(
       "message",

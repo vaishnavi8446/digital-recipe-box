@@ -6,7 +6,7 @@ const {
   updateRecipe,
   CheckIdExists,
   delRecipe,
-} = require("../db/recipeDB");
+} = require("./../query/recipeQueries");
 
 const {
   recipeIdSchema,
@@ -43,7 +43,6 @@ exports.getRecipeById = async (req, res) => {
         .json({ status_code: 400, error: error.details[0].message });
     }
     const recipeRes = await fetchRecipeById(conn, id);
-    console.log(recipeRes);
     if (recipeRes) {
       return res.status(200).send({
         status_code: 200,

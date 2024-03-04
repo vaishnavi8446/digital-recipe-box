@@ -1,17 +1,22 @@
 const bcrypt = require("bcrypt");
 
 const conn = require("../db/db");
-const { registerUser, loginUser, ifEmailExists } = require("../db/userDB");
+const {
+  registerUser,
+  loginUser,
+  ifEmailExists,
+} = require("../query/userQueries");
 const { generateToken } = require("../shared/auth");
-const { registerSchema, loginSchema } = require('../validation/userValidation');
+const { registerSchema, loginSchema } = require("../validation/userValidation");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, email, password } = await registerSchema.validateAsync(req.body);
+    const { username, email, password } = await registerSchema.validateAsync(
+      req.body
+    );
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const emailCheck = await ifEmailExists(conn, email);
-    console.log("emailCheck",emailCheck)
 
     if (!emailCheck) {
       let registerData = await registerUser(
@@ -48,26 +53,25 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(401).send({
         status_code: 401,
-        message: "Invalid email or password"
+        message: "Invalid email or password",
       });
     }
 
     const token = generateToken(user);
-    
+
     return res.status(200).send({
       status_code: 200,
       message: "Login successful",
-      token: token
+      token: token,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).send({
       status_code: 500,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 };
-
 
 // Retrieve user profile information
 // exports.getUserProfile = async (req, res) => {

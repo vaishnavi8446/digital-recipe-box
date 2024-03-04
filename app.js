@@ -1,38 +1,33 @@
+require('dotenv').config();
+
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./shared/swagger");
+const port = 3000;
+
+const app = express();
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.resolve(__dirname, "file")));
+
+app.use(express.json());
+
 const userRoutes = require("./routes/userRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-const uploadRoutes = require('./routes/uploadRoutes');
+const uploadRoutes = require("./routes/uploadRoutes");
 
-const app = express();
-const port = 3000;
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/recipe", recipeRoutes);
 app.use("/notification", notificationRoutes);
-app.use('/uploads', uploadRoutes);
+app.use("/uploads", uploadRoutes);
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// const db = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '',
-//     database: 'recipe'
-// });
-
-// db.connect((err) => {
-//     if (err) {
-//         throw err;
-//     }
-//     console.log('Connected to MySQL database');
-// });
-
-// Define your routes and controller functions here
-
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+module.exports = { app, server };

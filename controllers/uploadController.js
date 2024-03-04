@@ -1,6 +1,9 @@
-const Joi = require("joi");
 const conn = require("../db/db");
-const { addImage, fetchImage, getImageById } = require("../db/uploadDB");
+const {
+  addImage,
+  fetchImage,
+  getImageById,
+} = require("./../query/uploadQueries");
 const {
   getImageByIdSchema,
   getImageFilenameSchema,
@@ -63,7 +66,7 @@ exports.getImage = async (req, res) => {
 exports.getImageById = async (req, res) => {
   try {
     let id = req.params.id;
-   
+
     const { error } = getImageByIdSchema.validate({ id });
 
     if (error) {

@@ -1,20 +1,38 @@
 Digital Recipe Box
 
-Description: Create a digital recipe box where users can store and share their favorite recipes. The platform allows users to add, edit, and delete recipes. It includes features like ingredient quantities, cooking steps, and photos. Docker containers can be used to isolate the application and database.
+Description: Create a digital recipe box where users can store and share their favorite recipes. The platform allows users to add, edit, and delete recipes. It includes features like ingredient quantities, cooking steps, and photos.
+
+Key concepts:
+
+•	API Creation
+
+•	Joi Validation
+
+•	Authorization and authentication
+
+•	Testing using jest and supertest
+
+•	Swagger documentation
 
 
-Technologies Used -
+Technologies Used:
 
 •	Node.js
+
 •	Express.js
+
 •	MySQL
+
 •	Multer (for file uploads)
+
 •	bcrypt (for password hashing)
+
 •	Other dependencies as needed
 
 Commands-
 
 Start the server - npm run start:dev
+
 Testing - npm test
 
 

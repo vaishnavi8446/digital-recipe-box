@@ -4,6 +4,7 @@ Description: Create a digital recipe box where users can store and share their f
 
 
 Technologies Used -
+
 •	Node.js
 •	Express.js
 •	MySQL
@@ -12,8 +13,8 @@ Technologies Used -
 •	Other dependencies as needed
 
 Commands-
-Start the server - npm run start:dev
 
+Start the server - npm run start:dev
 Testing - npm test
 
 

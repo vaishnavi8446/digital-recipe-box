@@ -1,6 +1,9 @@
 Digital Recipe Box
 
-Description: Create a digital recipe box where users can store and share their favorite recipes. The platform allows users to add, edit, and delete recipes. It includes features like ingredient quantities, cooking steps, and photos.
+Description: 
+
+Create a digital recipe box where users can store and share their favorite recipes. The platform allows users to add, edit, and delete recipes. It includes features like ingredient quantities, cooking steps, and photos.
+
 
 Key concepts:
 
@@ -28,6 +31,7 @@ Technologies Used:
 •	bcrypt (for password hashing)
 
 •	Other dependencies as needed
+
 
 Commands-
 

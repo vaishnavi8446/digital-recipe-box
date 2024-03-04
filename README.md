@@ -1,4 +1,4 @@
-                                                                        Digital Recipe Box
+Digital Recipe Box
 
 Description:-
 
